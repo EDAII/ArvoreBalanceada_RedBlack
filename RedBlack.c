@@ -81,3 +81,103 @@ No *InserirNo(int valor, int chave, No *raiz){
     }
     return raiz;
 }
+
+int ehVermelho(No *h){
+    if(h == NULL) return 0;
+    return h->cor ==RED;
+}
+
+No *balancear(No *raiz){
+    if (ehVermelho(raiz->direito) && !ehVermelho(raiz->esquerdo)) raiz = RotateLeft(raiz);
+    if(ehVermelho(raiz->esquerdo) && ehVermelho(raiz->esquerdo->esquerdo)) raiz = RotateRight(raiz);
+    if(ehVermelho(raiz->esquerdo) && ehVermelho(raiz->direito)) FlipColors(raiz);
+
+    return raiz;
+}
+
+No *MoverVermelhoEsquerda(No *raiz){
+    FlipColors(raiz);
+
+    if (raiz->direito != NULL && ehVermelho(raiz->direito->esquerdo)){
+        raiz->direito = RotateRight(raiz->direito);
+        raiz = RotateLeft(raiz);
+        FlipColors(raiz);
+    }
+    return raiz;
+}
+
+No *MoverVermelhoDireita(No *raiz){
+    FlipColors(raiz);
+
+    if (raiz->esquerdo != NULL && ehVermelho(raiz->esquerdo->esquerdo)){
+        raiz = RotateRight(raiz);
+        FlipColors(raiz);
+    }
+    return raiz;
+}
+
+No *AcharMinimo(No *raiz){
+    if(raiz->esquerdo== NULL) return raiz;
+    return AcharMinimo(raiz->esquerdo);
+}
+
+No *RemoverMinimo(No *raiz){
+    if(raiz->esquerdo == NULL) {
+        free(raiz);
+        return NULL;
+    }
+
+    if(!ehVermelho(raiz->esquerdo) && !ehVermelho(raiz->esquerdo->esquerdo)){
+        raiz = MoverVermelhoEsquerda(raiz);
+    }
+
+    raiz->esquerdo = RemoverMinimo(raiz->esquerdo);
+
+    return balancear(raiz);
+}
+
+No *removerNo(No *raiz, int valor){
+    if(raiz == NULL) return NULL;
+
+    if(valor < raiz->valor){
+        if(raiz->esquerdo != NULL && !ehVermelho(raiz->esquerdo) && !ehVermelho(raiz->esquerdo->esquerdo)){
+            raiz = MoverVermelhoEsquerda(raiz);
+        }
+        raiz->esquerdo = removerNo(raiz->esquerdo, valor);
+
+    } else {
+        if(ehVermelho(raiz->esquerdo)){
+            raiz = RotateRight(raiz);
+        }
+
+        if(valor == raiz->valor && raiz->direito == NULL){
+            free(raiz);
+            return NULL;
+        }
+
+        if(raiz->direito != NULL && !ehVermelho(raiz->direito) && !ehVermelho(raiz->direito->esquerdo)){
+            raiz = MoverVermelhoDireita(raiz);
+        }
+
+        if(valor == raiz->valor){
+            No *sucessor = AcharMinimo(raiz->direito);
+            raiz->valor = sucessor->valor;
+            raiz->chave = sucessor->chave;
+            raiz->direito = RemoverMinimo(raiz->direito);
+        } else {
+            raiz->direito = removerNo(raiz->direito, valor);
+        }
+    }
+
+    return balancear(raiz);
+}
+
+No *Remover(No *raiz, int valor){
+    if(raiz == NULL) return NULL;
+
+    raiz = removerNo(raiz, valor);
+
+    if(raiz != NULL) raiz->cor = BLACK;
+    
+    return raiz;
+}
