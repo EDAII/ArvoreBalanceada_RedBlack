@@ -15,7 +15,7 @@ typedef struct no{
 }No;
 
 No *CriarNo(int valor, int chave){
-    No *raiz = malloc(sizeof(No))
+    No *raiz = malloc(sizeof(No));
 
     if(raiz == NULL){
         printf("Erro ao alocar memória");
@@ -28,34 +28,6 @@ No *CriarNo(int valor, int chave){
     raiz->pai = NULL;
     raiz->valor = valor;
     raiz->chave = chave;
-    return raiz;
-}
-
-
-No *InserirNo(int valor, int chave, No *raiz){
-    if(raiz == NULL){
-        raiz = CriarNo(valor, chave);
-        return raiz;
-    }
-    if(valor > raiz->valor){
-        raiz->direito = InserirNo(valor, chave, raiz->direito);
-        raiz->direito->pai = raiz;
-    }
-
-    if(valor < raiz->valor){
-        raiz->esquerdo = InserirNo(valor, chave, raiz->esquerdo);
-        raiz->esquerdo->pai = raiz;
-    }
-
-    if(raiz->direito->cor ==RED){
-        raiz = RotateLeft(raiz);
-    }
-    if(raiz->cor == RED && raiz->esquerdo->cor == RED){
-        raiz = RotateRight(raiz);
-    }
-    if(raiz->esquerdo->cor == RED && raiz->direito->cor == RED){
-        raiz = FlipColors(raiz);
-    }
     return raiz;
 }
 
@@ -81,4 +53,31 @@ void FlipColors(No *raiz){
     raiz->cor = !raiz->cor;
     raiz->esquerdo->cor = !raiz->esquerdo->cor;
     raiz->direito->cor = !raiz->direito->cor;
+}
+
+No *InserirNo(int valor, int chave, No *raiz){
+    if(raiz == NULL){
+        raiz = CriarNo(valor, chave);
+        return raiz;
+    }
+    if(valor > raiz->valor){
+        raiz->direito = InserirNo(valor, chave, raiz->direito);
+        raiz->direito->pai = raiz;
+    }
+
+    if(valor < raiz->valor){
+        raiz->esquerdo = InserirNo(valor, chave, raiz->esquerdo);
+        raiz->esquerdo->pai = raiz;
+    }
+
+    if(raiz->direito != NULL && raiz->direito->cor ==RED){
+        raiz = RotateLeft(raiz);
+    }
+    if(raiz->esquerdo != NULL && raiz->esquerdo->cor == RED && raiz->esquerdo->esquerdo != NULL && raiz->esquerdo->esquerdo->cor == RED){
+        raiz = RotateRight(raiz);
+    }
+    if(raiz->esquerdo != NULL && raiz->direito != NULL && raiz->esquerdo->cor == RED && raiz->direito->cor == RED){
+        FlipColors(raiz);
+    }
+    return raiz;
 }
