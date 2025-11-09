@@ -2,170 +2,168 @@
 #include <stdlib.h>
 #include "RedBlack.h"
 
-No *CriarNo(int valor, int chave){
-    No *raiz = malloc(sizeof(No));
-
-    if(raiz == NULL){
-        printf("Erro ao alocar memória");
+// cria nó
+No *CriarNo(long long valor, int chave) {
+    No *n = malloc(sizeof(No));
+    if (!n) {
+        fprintf(stderr, "Erro alocar No\n");
         exit(1);
     }
+    n->cor = RED;
+    n->pai = NULL;
+    n->esquerdo = NULL;
+    n->direito = NULL;
+    n->valor = valor;
+    n->chave = chave;
+    return n;
+}
 
-    raiz->cor = RED;
-    raiz->esquerdo = NULL;
-    raiz->direito = NULL;
-    raiz->pai = NULL;
-    raiz->valor = valor;
-    raiz->chave = chave;
+int ehVermelho(No *h) {
+    if (h == NULL) return 0;
+    return h->cor == RED;
+}
+
+No *RotateLeft(No *h) {
+    if (!h || !h->direito) return h;
+    No *x = h->direito;
+    h->direito = x->esquerdo;
+    if (x->esquerdo) x->esquerdo->pai = h;
+    x->esquerdo = h;
+
+    // ajustar pais
+    x->pai = h->pai;
+    h->pai = x;
+    // cores
+    x->cor = h->cor;
+    h->cor = RED;
+    return x;
+}
+
+No *RotateRight(No *h) {
+    if (!h || !h->esquerdo) return h;
+    No *x = h->esquerdo;
+    h->esquerdo = x->direito;
+    if (x->direito) x->direito->pai = h;
+    x->direito = h;
+
+    x->pai = h->pai;
+    h->pai = x;
+    x->cor = h->cor;
+    h->cor = RED;
+    return x;
+}
+
+void FlipColors(No *h) {
+    if (!h || !h->esquerdo || !h->direito) return;
+    h->cor = !h->cor;
+    h->esquerdo->cor = !h->esquerdo->cor;
+    h->direito->cor = !h->direito->cor;
+}
+
+// balanceio local
+No *balancear(No *h) {
+    if (h == NULL) return NULL;
+    if (ehVermelho(h->direito) && !ehVermelho(h->esquerdo)) h = RotateLeft(h);
+    if (ehVermelho(h->esquerdo) && ehVermelho(h->esquerdo->esquerdo)) h = RotateRight(h);
+    if (ehVermelho(h->esquerdo) && ehVermelho(h->direito)) FlipColors(h);
+    return h;
+}
+
+// move vermelho para esquerda (usado em remoção)
+No *MoverVermelhoEsquerda(No *h) {
+    FlipColors(h);
+    if (h->direito && ehVermelho(h->direito->esquerdo)) {
+        h->direito = RotateRight(h->direito);
+        if (h->direito) h->direito->pai = h;
+        h = RotateLeft(h);
+        FlipColors(h);
+    }
+    return h;
+}
+
+// move vermelho para direita (usado em remoção)
+No *MoverVermelhoDireita(No *h) {
+    FlipColors(h);
+    if (h->esquerdo && ehVermelho(h->esquerdo->esquerdo)) {
+        h = RotateRight(h);
+        FlipColors(h);
+    }
+    return h;
+}
+
+No *AcharMinimo(No *raiz) {
+    if (!raiz) return NULL;
+    No *cur = raiz;
+    while (cur->esquerdo) cur = cur->esquerdo;
+    return cur;
+}
+
+// remover nó mínimo preservando subárvore direita
+No *removerNoMinimo(No *h) {
+    if (!h) return NULL;
+    if (h->esquerdo == NULL) {
+        No *direita = h->direito;
+        free(h);
+        if (direita) direita->pai = NULL;
+        return direita;
+    }
+    if (!ehVermelho(h->esquerdo) && !ehVermelho(h->esquerdo->esquerdo)) {
+        h = MoverVermelhoEsquerda(h);
+    }
+    h->esquerdo = removerNoMinimo(h->esquerdo);
+    if (h->esquerdo) h->esquerdo->pai = h;
+    return balancear(h);
+}
+
+No *RemoverMinimo(No *raiz) {
+    if (!raiz) return NULL;
+    raiz = removerNoMinimo(raiz);
+    if (raiz) { raiz->cor = BLACK; raiz->pai = NULL; }
     return raiz;
 }
 
-No *RotateLeft(No *raiz){
-    No *aux = raiz->direito;
-    raiz->direito = aux->esquerdo;
-    aux->esquerdo = raiz;
-    aux->cor = raiz->cor;
-    raiz->cor = RED;
-    return aux;
-}
+// inserção recursiva (retorna raiz da subárvore)
+No *InserirNoRec(long long valor, int chave, No *h) {
+    if (h == NULL) return CriarNo(valor, chave);
 
-No *RotateRight(No *raiz){
-    No *aux = raiz->esquerdo;
-    raiz->esquerdo = aux->direito;
-    aux->direito = raiz;
-    aux->cor = raiz->cor;
-    raiz->cor = RED;
-    return aux;
-}
-
-void FlipColors(No *raiz){
-    raiz->cor = !raiz->cor;
-    raiz->esquerdo->cor = !raiz->esquerdo->cor;
-    raiz->direito->cor = !raiz->direito->cor;
-}
-
-No *InserirNo(int valor, int chave, No *raiz){
-    if(raiz == NULL){
-        raiz = CriarNo(valor, chave);
-        return raiz;
-    }
-    if(valor > raiz->valor){
-        raiz->direito = InserirNo(valor, chave, raiz->direito);
-        raiz->direito->pai = raiz;
-    }
-
-    if(valor < raiz->valor){
-        raiz->esquerdo = InserirNo(valor, chave, raiz->esquerdo);
-        raiz->esquerdo->pai = raiz;
-    }
-
-    if(raiz->direito != NULL && raiz->direito->cor ==RED){
-        raiz = RotateLeft(raiz);
-    }
-    if(raiz->esquerdo != NULL && raiz->esquerdo->cor == RED && raiz->esquerdo->esquerdo != NULL && raiz->esquerdo->esquerdo->cor == RED){
-        raiz = RotateRight(raiz);
-    }
-    if(raiz->esquerdo != NULL && raiz->direito != NULL && raiz->esquerdo->cor == RED && raiz->direito->cor == RED){
-        FlipColors(raiz);
-    }
-    return raiz;
-}
-
-int ehVermelho(No *h){
-    if(h == NULL) return 0;
-    return h->cor ==RED;
-}
-
-No *balancear(No *raiz){
-    if (ehVermelho(raiz->direito) && !ehVermelho(raiz->esquerdo)) raiz = RotateLeft(raiz);
-    if(ehVermelho(raiz->esquerdo) && ehVermelho(raiz->esquerdo->esquerdo)) raiz = RotateRight(raiz);
-    if(ehVermelho(raiz->esquerdo) && ehVermelho(raiz->direito)) FlipColors(raiz);
-
-    return raiz;
-}
-
-No *MoverVermelhoEsquerda(No *raiz){
-    FlipColors(raiz);
-
-    if (raiz->direito != NULL && ehVermelho(raiz->direito->esquerdo)){
-        raiz->direito = RotateRight(raiz->direito);
-        raiz = RotateLeft(raiz);
-        FlipColors(raiz);
-    }
-    return raiz;
-}
-
-No *MoverVermelhoDireita(No *raiz){
-    FlipColors(raiz);
-
-    if (raiz->esquerdo != NULL && ehVermelho(raiz->esquerdo->esquerdo)){
-        raiz = RotateRight(raiz);
-        FlipColors(raiz);
-    }
-    return raiz;
-}
-
-No *AcharMinimo(No *raiz){
-    if(raiz->esquerdo== NULL) return raiz;
-    return AcharMinimo(raiz->esquerdo);
-}
-
-No *RemoverMinimo(No *raiz){
-    if(raiz->esquerdo == NULL) {
-        free(raiz);
-        return NULL;
-    }
-
-    if(!ehVermelho(raiz->esquerdo) && !ehVermelho(raiz->esquerdo->esquerdo)){
-        raiz = MoverVermelhoEsquerda(raiz);
-    }
-
-    raiz->esquerdo = RemoverMinimo(raiz->esquerdo);
-
-    return balancear(raiz);
-}
-
-No *removerNo(No *raiz, int valor){
-    if(raiz == NULL) return NULL;
-
-    if(valor < raiz->valor){
-        if(raiz->esquerdo != NULL && !ehVermelho(raiz->esquerdo) && !ehVermelho(raiz->esquerdo->esquerdo)){
-            raiz = MoverVermelhoEsquerda(raiz);
-        }
-        raiz->esquerdo = removerNo(raiz->esquerdo, valor);
-
+    if (valor < h->valor) {
+        No *e = InserirNoRec(valor, chave, h->esquerdo);
+        h->esquerdo = e;
+        if (e) e->pai = h;
     } else {
-        if(ehVermelho(raiz->esquerdo)){
-            raiz = RotateRight(raiz);
-        }
-
-        if(valor == raiz->valor && raiz->direito == NULL){
-            free(raiz);
-            return NULL;
-        }
-
-        if(raiz->direito != NULL && !ehVermelho(raiz->direito) && !ehVermelho(raiz->direito->esquerdo)){
-            raiz = MoverVermelhoDireita(raiz);
-        }
-
-        if(valor == raiz->valor){
-            No *sucessor = AcharMinimo(raiz->direito);
-            raiz->valor = sucessor->valor;
-            raiz->chave = sucessor->chave;
-            raiz->direito = RemoverMinimo(raiz->direito);
-        } else {
-            raiz->direito = removerNo(raiz->direito, valor);
-        }
+        No *d = InserirNoRec(valor, chave, h->direito);
+        h->direito = d;
+        if (d) d->pai = h;
     }
 
-    return balancear(raiz);
+    if (ehVermelho(h->direito) && !ehVermelho(h->esquerdo)) h = RotateLeft(h);
+    if (ehVermelho(h->esquerdo) && ehVermelho(h->esquerdo->esquerdo)) h = RotateRight(h);
+    if (ehVermelho(h->esquerdo) && ehVermelho(h->direito)) FlipColors(h);
+
+    return h;
 }
 
-No *Remover(No *raiz, int valor){
-    if(raiz == NULL) return NULL;
-
-    raiz = removerNo(raiz, valor);
-
-    if(raiz != NULL) raiz->cor = BLACK;
-    
+No *InserirNo(long long valor, int chave, No *raiz) {
+    raiz = InserirNoRec(valor, chave, raiz);
+    if (raiz) { raiz->cor = BLACK; raiz->pai = NULL; }
     return raiz;
+}
+
+// tamanho (recursivo)
+int tamanho_recursivo(No *raiz) {
+    if (!raiz) return 0;
+    return 1 + tamanho_recursivo(raiz->esquerdo) + tamanho_recursivo(raiz->direito);
+}
+int Tamanho(No *raiz) { return tamanho_recursivo(raiz); }
+
+// procura o nó com chave == chave_evento e menor valor (próximo tick)
+No* AcharEvento(No* raiz, int chave_evento) {
+    if (!raiz) return NULL;
+    No *melhor = NULL;
+    if (raiz->chave == chave_evento) melhor = raiz;
+    No *esq = AcharEvento(raiz->esquerdo, chave_evento);
+    if (esq && (!melhor || esq->valor < melhor->valor)) melhor = esq;
+    No *dir = AcharEvento(raiz->direito, chave_evento);
+    if (dir && (!melhor || dir->valor < melhor->valor)) melhor = dir;
+    return melhor;
 }

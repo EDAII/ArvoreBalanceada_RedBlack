@@ -1,32 +1,31 @@
 #ifndef ARVORE_H
 #define ARVORE_H
 
+// cores
 #define RED 1
 #define BLACK 0
 
-typedef struct no{
+typedef struct no {
     int cor;
     struct no *pai;
     struct no *esquerdo;
     struct no *direito;
-    int valor;
-    int chave;
+    long long valor; // timestamp em ms
+    int chave;       // id do evento
+} No;
 
-}No;
-
-No *CriarNo(int valor, int chave);
-No *InserirNo(int valor, int chave, No *raiz);
+// protótipos
+No *CriarNo(long long valor, int chave);
+No *InserirNo(long long valor, int chave, No *raiz);
 No *RotateLeft(No *raiz);
 No *RotateRight(No *raiz);
 void FlipColors(No *raiz);
-No *Remover(No *raiz, int valor);
-No *removerNo(No *raiz, int valor);
+
 No *RemoverMinimo(No *raiz);
-No *balancear(No *raiz);
-No *MoverVermelhoEsquerda(No *raiz);
-No *MoverVermelhoDireita(No *raiz);
 No *AcharMinimo(No *raiz);
 int ehVermelho(No *h);
 
+int Tamanho(No *raiz);
+No* AcharEvento(No* raiz, int chave_evento);
 
 #endif
