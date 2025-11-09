@@ -1,18 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-#define RED 1
-#define BLACK 0
-
-typedef struct no{
-    int cor;
-    struct no *pai;
-    struct no *esquerdo;
-    struct no *direito;
-    int valor;
-    int chave;
-
-}No;
+#include "RedBlack.h"
 
 No *CriarNo(int valor, int chave){
     No *raiz = malloc(sizeof(No));

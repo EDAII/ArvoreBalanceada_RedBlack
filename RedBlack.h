@@ -1,6 +1,9 @@
 #ifndef ARVORE_H
 #define ARVORE_H
 
+#define RED 1
+#define BLACK 0
+
 typedef struct no{
     int cor;
     struct no *pai;
