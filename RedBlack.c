@@ -29,11 +29,8 @@ No *RotateLeft(No *h) {
     h->direito = x->esquerdo;
     if (x->esquerdo) x->esquerdo->pai = h;
     x->esquerdo = h;
-
-    // ajustar pais
     x->pai = h->pai;
     h->pai = x;
-    // cores
     x->cor = h->cor;
     h->cor = RED;
     return x;
@@ -45,7 +42,6 @@ No *RotateRight(No *h) {
     h->esquerdo = x->direito;
     if (x->direito) x->direito->pai = h;
     x->direito = h;
-
     x->pai = h->pai;
     h->pai = x;
     x->cor = h->cor;
@@ -60,69 +56,18 @@ void FlipColors(No *h) {
     h->direito->cor = !h->direito->cor;
 }
 
-// balanceio local
 No *balancear(No *h) {
     if (h == NULL) return NULL;
-    if (ehVermelho(h->direito) && !ehVermelho(h->esquerdo)) h = RotateLeft(h);
-    if (ehVermelho(h->esquerdo) && ehVermelho(h->esquerdo->esquerdo)) h = RotateRight(h);
-    if (ehVermelho(h->esquerdo) && ehVermelho(h->direito)) FlipColors(h);
-    return h;
-}
-
-// move vermelho para esquerda (usado em remoção)
-No *MoverVermelhoEsquerda(No *h) {
-    FlipColors(h);
-    if (h->direito && ehVermelho(h->direito->esquerdo)) {
-        h->direito = RotateRight(h->direito);
-        if (h->direito) h->direito->pai = h;
+    if (ehVermelho(h->direito) && !ehVermelho(h->esquerdo))
         h = RotateLeft(h);
-        FlipColors(h);
-    }
-    return h;
-}
-
-// move vermelho para direita (usado em remoção)
-No *MoverVermelhoDireita(No *h) {
-    FlipColors(h);
-    if (h->esquerdo && ehVermelho(h->esquerdo->esquerdo)) {
+    if (ehVermelho(h->esquerdo) && ehVermelho(h->esquerdo->esquerdo))
         h = RotateRight(h);
+    if (ehVermelho(h->esquerdo) && ehVermelho(h->direito))
         FlipColors(h);
-    }
     return h;
 }
 
-No *AcharMinimo(No *raiz) {
-    if (!raiz) return NULL;
-    No *cur = raiz;
-    while (cur->esquerdo) cur = cur->esquerdo;
-    return cur;
-}
-
-// remover nó mínimo preservando subárvore direita
-No *removerNoMinimo(No *h) {
-    if (!h) return NULL;
-    if (h->esquerdo == NULL) {
-        No *direita = h->direito;
-        free(h);
-        if (direita) direita->pai = NULL;
-        return direita;
-    }
-    if (!ehVermelho(h->esquerdo) && !ehVermelho(h->esquerdo->esquerdo)) {
-        h = MoverVermelhoEsquerda(h);
-    }
-    h->esquerdo = removerNoMinimo(h->esquerdo);
-    if (h->esquerdo) h->esquerdo->pai = h;
-    return balancear(h);
-}
-
-No *RemoverMinimo(No *raiz) {
-    if (!raiz) return NULL;
-    raiz = removerNoMinimo(raiz);
-    if (raiz) { raiz->cor = BLACK; raiz->pai = NULL; }
-    return raiz;
-}
-
-// inserção recursiva (retorna raiz da subárvore)
+// inserção recursiva
 No *InserirNoRec(long long valor, int chave, No *h) {
     if (h == NULL) return CriarNo(valor, chave);
 
@@ -130,40 +75,52 @@ No *InserirNoRec(long long valor, int chave, No *h) {
         No *e = InserirNoRec(valor, chave, h->esquerdo);
         h->esquerdo = e;
         if (e) e->pai = h;
-    } else {
+    } else if (valor > h->valor) {
         No *d = InserirNoRec(valor, chave, h->direito);
         h->direito = d;
         if (d) d->pai = h;
+    } else {
+        h->chave = chave; // sobrescreve chave se valor igual
     }
 
     if (ehVermelho(h->direito) && !ehVermelho(h->esquerdo)) h = RotateLeft(h);
     if (ehVermelho(h->esquerdo) && ehVermelho(h->esquerdo->esquerdo)) h = RotateRight(h);
     if (ehVermelho(h->esquerdo) && ehVermelho(h->direito)) FlipColors(h);
-
     return h;
 }
 
-No *InserirNo(long long valor, int chave, No *raiz) {
-    raiz = InserirNoRec(valor, chave, raiz);
-    if (raiz) { raiz->cor = BLACK; raiz->pai = NULL; }
-    return raiz;
+No *remover_min(No *h, No **min) {
+    if (!h->esquerdo) {
+        *min = h;
+        return h->direito;
+    }
+    h->esquerdo = remover_min(h->esquerdo, min);
+    return balancear(h);
 }
 
-// tamanho (recursivo)
-int tamanho_recursivo(No *raiz) {
-    if (!raiz) return 0;
-    return 1 + tamanho_recursivo(raiz->esquerdo) + tamanho_recursivo(raiz->direito);
+No *RemoverNoRec(long long valor, No *h) {
+    if (!h) return NULL;
+    if (valor < h->valor) h->esquerdo = RemoverNoRec(valor,h->esquerdo);
+    else if (valor > h->valor) h->direito = RemoverNoRec(valor,h->direito);
+    else {
+        if (!h->direito) return h->esquerdo;
+        if (!h->esquerdo) return h->direito;
+        No *min = NULL;
+        No *d = h->direito;
+        d = remover_min(d, &min);
+        min->esquerdo = h->esquerdo;
+        min->direito = d;
+        min->cor = h->cor;
+        free(h);
+        return balancear(min);
+    }
+    return balancear(h);
 }
-int Tamanho(No *raiz) { return tamanho_recursivo(raiz); }
 
-// procura o nó com chave == chave_evento e menor valor (próximo tick)
-No* AcharEvento(No* raiz, int chave_evento) {
-    if (!raiz) return NULL;
-    No *melhor = NULL;
-    if (raiz->chave == chave_evento) melhor = raiz;
-    No *esq = AcharEvento(raiz->esquerdo, chave_evento);
-    if (esq && (!melhor || esq->valor < melhor->valor)) melhor = esq;
-    No *dir = AcharEvento(raiz->direito, chave_evento);
-    if (dir && (!melhor || dir->valor < melhor->valor)) melhor = dir;
-    return melhor;
+
+void DesalocarArvore(No *raiz){
+    if (raiz == NULL) return;
+    DesalocarArvore(raiz->esquerdo);
+    DesalocarArvore(raiz->direito);
+    free(raiz);
 }
