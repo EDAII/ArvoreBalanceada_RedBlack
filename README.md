@@ -150,19 +150,19 @@ Irmão preto, filho distante vermelho: troca cores entre irmão e pai, rotaciona
 
 ### Capturas de tela
 
-[imagem 1](assets/inicio.png)
+![imagem 1](assets/inicio.png)
 
 A imagem mostra o início do jogo, explicando o jogo e mostrando as escolhas possíveis.
 
-[imagem 2](assets/escolha_ruminacao.png)
+![imagem 2](assets/escolha_ruminacao.png)
 
 A imagem mostra a ruminação agindo, criando várias emoções de felicidade.
 
-[imagem 3](assets/estatisticas_escolha.png)
+![imagem 3](assets/estatisticas_escolha.png)
 
 A imagem mostra as estatísticas gerais daquela escolha, como inserção, rotações e remoções.
 
-[imagem 4](assets/resultado.png)
+![imagem 4](assets/resultado.png)
 
 A imagem mostra uma tela de fim de jogo, mostrando as estatísticas gerais.
 
@@ -179,9 +179,9 @@ No jogo, isso se aplica quando:
 
 ### Link do Vídeo de apresentação
 
-[Link Vídeo](https://youtu.be/67S4NCYPA3U)
+![Link Vídeo](https://youtu.be/67S4NCYPA3U)
 
-[Link Vídeo](https://youtube.com/embed/67S4NCYPA3U)
+![Link Vídeo](https://youtube.com/embed/67S4NCYPA3U)
 
 ## Referências
 
