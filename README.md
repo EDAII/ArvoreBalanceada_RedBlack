@@ -108,7 +108,7 @@ gcc main.c RedBlack.c -o rodar
 ## Árvore Red Black
 
 A **Árvore Rubro-Negra** (Red-Black Tree) é uma **árvore binária balanceada** que garante que operações de **inserção, busca e remoção** ocorram em complexidade de O(logn), mesmo nos piores casos.
-Cada nó possui uma cor (vermelho ou preto) e regras específicas para manter a árvore balanceada. Para isso, ela garante que qualquer caminho da raiz até uma folha (nil) tenha **exatamente o mesmo número** de nós pretos (propriedade conhecida como "black-height").
+Cada nó possui uma cor (vermelho ou preto) e regras específicas para manter a árvore balanceada. Para isso, ela garante que qualquer caminho da raiz até uma folha (nil) tenha **exatamente o mesmo número** de nós pretos.
 
 ### Função no Jogo
 
@@ -149,6 +149,22 @@ Irmão preto, filho distante vermelho: troca cores entre irmão e pai, rotaciona
   - **Busca mínima/máxima**: encontra rapidamente a emoção mais fraca ou mais intensa, usada para decidir a emoção dominante ou remover emoções triviais.
 
 ### Capturas de tela
+
+[imagem 1](assets/inicio.png)
+
+A imagem mostra o início do jogo, explicando o jogo e mostrando as escolhas possíveis.
+
+[imagem 2](assets/escolha_ruminacao.png)
+
+A imagem mostra a ruminação agindo, criando várias emoções de felicidade.
+
+[imagem 3](assets/estatisticas_escolha.png)
+
+A imagem mostra as estatísticas gerais daquela escolha, como inserção, rotações e remoções.
+
+[imagem 4](assets/resultado.png)
+
+A imagem mostra uma tela de fim de jogo, mostrando as estatísticas gerais.
 
 ## Conclusão
 
