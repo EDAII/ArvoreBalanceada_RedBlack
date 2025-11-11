@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Emoções - Red-Black Tree</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <h1 class="logo">
+                    <i class="fas fa-tree"></i> Simulador de Emoções
+                </h1>
+                <ul class="nav-links">
+                    <li><a href="#home" class="active">Início</a></li>
+                    <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="#mecanicas">Mecânicas</a></li>
+                    <li><a href="#arvore">Red-Black</a></li>
+                    <li><a href="#instalacao">Instalação</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2 class="hero-title">Implementação Educacional de Estrutura de Dados</h2>
+                <p class="hero-subtitle">Explore o desenvolvimento emocional através de uma Árvore Rubro-Negra balanceada</p>
+                <div class="hero-buttons">
+                    <a href="#instalacao" class="btn btn-primary">
+                        <i class="fas fa-download"></i> Começar
+                    </a>
+                    <a href="https://github.com/EDAII/ArvoreBalanceada_RedBlack" class="btn btn-secondary" target="_blank">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+            <div class="hero-illustration">
+                <div class="tree-animation">
+                    <div class="tree-node root">●</div>
+                    <div class="tree-node left">●</div>
+                    <div class="tree-node right">●</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sobre" class="sobre">
+        <div class="container">
+            <h2 class="section-title">Sobre o Projeto</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Simulação Interativa</h3>
+                    <p>Simule o desenvolvimento emocional de uma criança até os 18 anos através de escolhas estratégicas que moldam sua personalidade.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Implementação em C</h3>
+                    <p>Implementação eficiente em C puro, demonstrando conceitos avançados de estruturas de dados balanceadas.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Análise de Performance</h3>
+                    <p>Rastreamento em tempo real de operações da árvore: inserções, remoções, buscas e rotações de balanceamento.</p>
+                </div>
+            </div>
+
+            <div class="project-info">
+                <div class="info-section">
+                    <h3><i class="fas fa-users"></i> Desenvolvedores</h3>
+                    <table class="developers-table">
+                        <tr>
+                            <td class="dev-matricula">23/1033737</td>
+                            <td class="dev-nome">Artur Mendonça Arruda</td>
+                        </tr>
+                        <tr>
+                            <td class="dev-matricula">23/1035464</td>
+                            <td class="dev-nome">Lucas Mendonça Arruda</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="info-section">
+                    <h3><i class="fas fa-info-circle"></i> Disciplina</h3>
+                    <p><strong>Estrutura de Dados II</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="emocoes">
+        <div class="container">
+            <h2 class="section-title">Estados Emocionais</h2>
+            <div class="emotions-grid">
+                <div class="emotion-card felicidade">
+                    <div class="emotion-emoji">Felicidade</div>
+                    <h3>Felicidade</h3>
+                    <p>Escolhas positivas que geram bem-estar e desenvolvimento saudável.</p>
+                </div>
+                <div class="emotion-card tristeza">
+                    <div class="emotion-emoji">Tristeza</div>
+                    <h3>Tristeza</h3>
+                    <p>Consequências de escolhas inadequadas ou situações desafiadoras.</p>
+                </div>
+                <div class="emotion-card raiva">
+                    <div class="emotion-emoji">Raiva</div>
+                    <h3>Raiva</h3>
+                    <p>Respostas agressivas que podem reforçar comportamentos negativos.</p>
+                </div>
+                <div class="emotion-card medo">
+                    <div class="emotion-emoji">Medo</div>
+                    <h3>Medo</h3>
+                    <p>Reações defensivas que afetam a confiança e autonomia.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="mecanicas" class="mecanicas">
+        <div class="container">
+            <h2 class="section-title">Mecânicas do Jogo</h2>
+            
+            <div class="mechanics-content">
+                <div class="mechanic-item">
+                    <div class="mechanic-number">1</div>
+                    <div class="mechanic-text">
+                        <h3><i class="fas fa-calendar"></i> Processamento Anual</h3>
+                        <p>A cada ano, emoções com intensidade baixa (< 30) são removidas, simulando o "esquecimento" de sentimentos triviais.</p>
+                    </div>
+                </div>
+
+                <div class="mechanic-item">
+                    <div class="mechanic-number">2</div>
+                    <div class="mechanic-text">
+                        <h3><i class="fas fa-brain"></i> Ruminação</h3>
+                        <p>Emoções dominantes podem gerar novos sentimentos similares, reforçando padrões emocionais.</p>
+                    </div>
+                </div>
+
+                <div class="mechanic-item">
+                    <div class="mechanic-number">3</div>
+                    <div class="mechanic-text">
+                        <h3><i class="fas fa-exclamation-circle"></i> Colapso Emocional</h3>
+                        <p>Se qualquer emoção exceder 150 de intensidade, o personagem sofre colapso e o jogo termina.</p>
+                    </div>
+                </div>
+
+                <div class="mechanic-item">
+                    <div class="mechanic-number">4</div>
+                    <div class="mechanic-text">
+                        <h3><i class="fas fa-cubes"></i> Escolhas Estratégicas</h3>
+                        <p>Cada ano apresenta eventos adaptativos para a idade, com 4 opções que moldam o desenvolvimento.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="events-timeline">
+                <h3 class="timeline-title"><i class="fas fa-timeline"></i> Fases da Vida</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <span class="timeline-age">1-3 anos</span>
+                        <p>Birras e recusa alimentar</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-age">4-7 anos</span>
+                        <p>Conflitos sociais e tarefas</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-age">8-10 anos</span>
+                        <p>Desempenho escolar</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-age">11-15 anos</span>
+                        <p>Cyberbullying e pressão social</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-age">16-18 anos</span>
+                        <p>Vestibular e autonomia</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="arvore" class="arvore">
+        <div class="container">
+            <h2 class="section-title">Árvore Rubro-Negra</h2>
+            
+            <div class="tree-explanation">
+                <div class="tree-concept">
+                    <h3><i class="fas fa-tree"></i> Definição</h3>
+                    <p>Uma árvore binária balanceada onde cada nó é colorido de vermelho ou preto. Garante operações de busca, inserção e remoção em O(log n), mesmo nos piores casos.</p>
+                </div>
+
+                <div class="tree-properties">
+                    <h3><i class="fas fa-list"></i> Propriedades</h3>
+                    <ul class="properties-list">
+                        <li><span class="property-color red">●</span> <strong>Raiz é sempre PRETA</strong></li>
+                        <li><span class="property-color black">●</span> <strong>NIL são PRETOS</strong></li>
+                        <li><span class="property-color red">●</span> <strong>Pai de vermelho é preto</strong></li>
+                        <li><span class="property-color black">●</span> <strong>Todos os caminhos até NIL têm mesmo número de pretos</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="operations-grid">
+                <div class="operation-card">
+                    <h4><i class="fas fa-plus-circle"></i> Inserção</h4>
+                    <p class="complexity">O(log n)</p>
+                    <p>Insere novo nó e rebalanceia a árvore mantendo as propriedades.</p>
+                </div>
+                <div class="operation-card">
+                    <h4><i class="fas fa-search"></i> Busca</h4>
+                    <p class="complexity">O(log n)</p>
+                    <p>Encontra emoções com intensidade específica rapidamente.</p>
+                </div>
+                <div class="operation-card">
+                    <h4><i class="fas fa-trash"></i> Remoção</h4>
+                    <p class="complexity">O(log n)</p>
+                    <p>Remove emoções triviais e rebalanceia a árvore.</p>
+                </div>
+                <div class="operation-card">
+                    <h4><i class="fas fa-sync"></i> Rotações</h4>
+                    <p class="complexity">O(1)</p>
+                    <p>Operações locais que mantêm o balanceamento.</p>
+                </div>
+            </div>
+
+            <div class="tree-use-case">
+                <h3>Uso no Simulador</h3>
+                <div class="use-case-content">
+                    <div class="use-case-item">
+                        <span class="use-case-number">1</span>
+                        <p>Armazena <strong>emoções com suas intensidades</strong> ordenadas</p>
+                    </div>
+                    <div class="use-case-item">
+                        <span class="use-case-number">2</span>
+                        <p>Permite encontrar <strong>emoção dominante</strong> em O(1)</p>
+                    </div>
+                    <div class="use-case-item">
+                        <span class="use-case-number">3</span>
+                        <p>Remove <strong>emoções triviais</strong> eficientemente</p>
+                    </div>
+                    <div class="use-case-item">
+                        <span class="use-case-number">4</span>
+                        <p>Mantém estrutura <strong>sempre balanceada</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="instalacao" class="instalacao">
+        <div class="container">
+            <h2 class="section-title">Como Instalar e Executar</h2>
+            
+            <div class="installation-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Clone o Repositório</h3>
+                    <div class="code-block">
+                        <code>git clone https://github.com/EDAII/ArvoreBalanceada_RedBlack.git</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Navegue para a Pasta</h3>
+                    <div class="code-block">
+                        <code>cd ArvoreBalanceada_RedBlack</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Compile com GCC</h3>
+                    <div class="code-block">
+                        <code>gcc main.c RedBlack.c -o rodar</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Execute o Programa</h3>
+                    <div class="code-block">
+                        <code>./rodar</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="requirements">
+                <h3><i class="fas fa-tools"></i> Requisitos</h3>
+                <div class="requirements-grid">
+                    <div class="requirement-item">
+                        <i class="fas fa-linux"></i>
+                        <span>Linux / Windows com GCC</span>
+                    </div>
+                    <div class="requirement-item">
+                        <i class="fas fa-code"></i>
+                        <span>GCC 9.4 ou superior</span>
+                    </div>
+                    <div class="requirement-item">
+                        <i class="fas fa-book"></i>
+                        <span>Padrão C99</span>
+                    </div>
+                    <div class="requirement-item">
+                        <i class="fas fa-cube"></i>
+                        <span>Sem dependências externas</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="windows-note">
+                <i class="fab fa-windows"></i>
+                <p><strong>Usuários Windows:</strong> Instale o GCC ou use compiladores online como <a href="https://www.onlinegdb.com/" target="_blank">OnlineGDB</a></p>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <h2 class="section-title">Contadores da Árvore</h2>
+            <p class="stats-description">O programa rastreia todas as operações em tempo real:</p>
+            
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <h4>Inserções</h4>
+                    <p>Número total de emoções adicionadas</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <h4>Remoções</h4>
+                    <p>Emoções triviais esquecidas</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h4>Buscas</h4>
+                    <p>Operações de busca simples</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h4>Rotações</h4>
+                    <p>Operações de balanceamento</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4><i class="fas fa-graduation-cap"></i> Disciplina</h4>
+                    <p>Estrutura de Dados II</p>
+                </div>
+                <div class="footer-section">
+                    <h4><i class="fab fa-github"></i> Repositório</h4>
+                    <p><a href="https://github.com/EDAII/ArvoreBalanceada_RedBlack" target="_blank">GitHub EDAII</a></p>
+                </div>
+                <div class="footer-section">
+                    <h4><i class="fas fa-code"></i> Tecnologia</h4>
+                    <p>C | Red-Black Tree | GCC</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Simulador de Emoções - Todos os direitos reservados</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
