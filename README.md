@@ -88,7 +88,7 @@ Não são necessárias bibliotecas externas, apenas o compilador C padrão.
 <!-- end list -->
 
 ```bash
-git clone https://github.com/EDAII/ArvoreBalanceada_RedBlack.git
+git clone https://github.com/EDAII/ArvoreBalanceada_Simulador_Emocoes.git
 ```
 
 1.  Abra o terminal na pasta do projeto com o comando: `cd ArvoreBalanceada_RedBlack`
