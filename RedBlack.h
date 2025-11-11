@@ -5,16 +5,37 @@
 #define BLACK 0
 
 typedef struct No {
-    long long valor; // valor usado como chave de ordenação (ex: id do item)
-    int chave;        // categoria ou tipo
-    int cor;          // RED ou BLACK
+    long long valor; // Chave de ordenação
+    int chave;       // Categoria (tipo de emoção)
+    int cor;
     struct No *pai;
     struct No *esquerdo;
     struct No *direito;
 } No;
- 
-No *InserirNoRec(long long valor, int chave, No *raiz);
-No *RemoverNoRec(long long valor, No *raiz);
 
-void DesalocarArvore(No *raiz);
+// Nó sentinela global
+extern No *NIL;
+
+// === NOVOS CONTADORES GLOBAIS ===
+// (Serão definidos em RedBlack.c e lidos em main.c)
+extern long long g_count_insert;
+extern long long g_count_remove;
+extern long long g_count_search;
+extern long long g_count_search_min_max;
+extern long long g_count_rotations;
+// ================================
+
+// Funções principais
+void InicializarNIL();
+No *CriarNo(long long valor, int chave);
+void RB_insert(No **T, No *z);
+void RB_delete(No **T, No *z);
+
+// Funções de busca (para o jogo)
+No* BuscarNo(No *n, long long valor); 
+No* BuscarMaximo(No *n);
+No* Tree_minimum(No *n);
+
+void DesalocarArvore(No *n);
+
 #endif
