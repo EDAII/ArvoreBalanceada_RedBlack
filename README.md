@@ -179,9 +179,9 @@ No jogo, isso se aplica quando:
 
 ### Link do Vídeo de apresentação
 
-![Link Vídeo](https://youtu.be/67S4NCYPA3U)
+[Link Vídeo](https://youtu.be/67S4NCYPA3U)
 
-![Link Vídeo](https://youtube.com/embed/67S4NCYPA3U)
+[Link Vídeo](https://youtube.com/embed/67S4NCYPA3U)
 
 ## Referências
 
